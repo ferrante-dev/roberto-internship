@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaCheck } from "react-icons/fa";
 import { formatEth, getNftPath } from "../../components/UI/nftApi";
 
 const AuthorItems = ({ items = [], profile = {} }) => {
@@ -22,6 +22,9 @@ const AuthorItems = ({ items = [], profile = {} }) => {
                 ) : (
                   <span>{(profile.name || "?").charAt(0)}</span>
                 )}
+                <span className="author-items__verified">
+                  <FaCheck />
+                </span>
               </div>
             </div>
             {nftPath ? (

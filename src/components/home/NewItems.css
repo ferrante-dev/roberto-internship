@@ -1,0 +1,668 @@
+.new-items__carousel {
+  position: relative;
+  width: 100%;
+}
+
+.new-items__slide {
+  min-width: 0;
+  height: auto;
+}
+
+.new-items__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 350px;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  transition: box-shadow 0.25s ease;
+}
+
+.new-items__card:hover,
+.new-items__card:focus-within {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.new-items__card-top {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.new-items__avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #eee;
+  color: #333;
+  pointer-events: auto;
+}
+
+.new-items__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.new-items__verified,
+.nft-details__verified,
+.author-profile__verified,
+.author-items__verified {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #8064e8;
+  color: #fff;
+}
+
+.new-items__verified svg,
+.nft-details__verified svg,
+.author-profile__verified svg,
+.author-items__verified svg {
+  width: 10px;
+  height: 10px;
+}
+
+.new-items__countdown {
+  padding: 4px 9px;
+  border: 1px solid #8064e8;
+  border-radius: 20px;
+  background: #fff;
+  color: #111;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.new-items__image-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 235px;
+  margin-top: 28px;
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.new-items__image-link img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.new-items__card:hover .new-items__image-link img,
+.new-items__card:focus-within .new-items__image-link img {
+  transform: translateY(-3px) scale(1.05);
+}
+
+.new-items__card-info {
+  margin-top: auto;
+  padding: 16px 2px 2px;
+}
+
+.new-items__card-info h4 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #101025;
+}
+
+.new-items__card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  color: #666;
+  font-size: 13px;
+}
+
+.new-items__likes {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #888;
+}
+
+.new-items__likes svg {
+  width: 13px;
+  height: 13px;
+  color: #d5d5d5;
+}
+
+.new-items__arrow,
+.new-items__arrow:disabled {
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: #fff;
+  background-image: none;
+  color: #111;
+  opacity: 1;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+}
+
+.new-items__arrow {
+  cursor: pointer;
+}
+
+.new-items__arrow:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.new-items__arrow svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+.new-items__arrow--left {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.new-items__arrow--right {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.new-items__arrow:not(:disabled):hover {
+  background: #f5f5f5;
+}
+
+.new-items__arrow:focus-visible {
+  outline: 2px solid #8064e8;
+  outline-offset: 3px;
+}
+
+.new-items__loading {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.new-items__skeleton-card {
+  position: relative;
+  min-width: 0;
+  min-height: 350px;
+  padding: 14px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.new-items__skeleton-avatar {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+}
+
+.new-items__skeleton-timer {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+}
+
+.new-items__skeleton-image {
+  width: 100%;
+  height: 235px;
+  margin-top: 28px;
+}
+
+.new-items__skeleton-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 2px 2px;
+}
+
+.nft-details__person {
+  margin-top: 22px;
+}
+
+.nft-details__person h6 {
+  margin-bottom: 12px;
+}
+
+.nft-details__person-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: #151525;
+}
+
+.nft-details__person-link strong {
+  font-size: 14px;
+}
+
+.nft-details__person-avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #eee;
+  color: #333;
+}
+
+.nft-details__person-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.nft-details__price {
+  margin-top: 26px;
+}
+
+.nft-details__price h6 {
+  margin-bottom: 12px;
+}
+
+.nft-details__skeleton-image {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.nft-details__skeleton-image--hot {
+  aspect-ratio: 6 / 5;
+}
+
+.nft-details__skeleton-image--new {
+  aspect-ratio: 7 / 5;
+}
+
+.nft-details__skeleton-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.nft-details__skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nft-details__skeleton-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.nft-details__skeleton-person {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.author-profile__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 28px;
+  margin-bottom: 55px;
+}
+
+.author-profile__identity {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.author-profile__avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #eee;
+  color: #333;
+  font-size: 36px;
+}
+
+.author-profile__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-profile__verified {
+  width: 29px;
+  height: 29px;
+}
+
+.author-profile__verified svg {
+  width: 14px;
+  height: 14px;
+}
+
+.author-profile__info {
+  min-width: 0;
+}
+
+.author-profile__info h2 {
+  margin-bottom: 5px;
+  font-size: 25px;
+}
+
+.author-profile__username {
+  display: block;
+  margin-bottom: 8px;
+  color: #8064e8;
+  font-weight: 600;
+}
+
+.author-profile__wallet {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 320px;
+}
+
+.author-profile__wallet span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.author-profile__wallet button {
+  flex-shrink: 0;
+  padding: 3px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f7f7f7;
+  cursor: pointer;
+}
+
+.author-profile__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.author-profile__actions .btn-main {
+  min-width: 100px;
+}
+
+.author-items__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.author-items__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 330px;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  transition: box-shadow 0.25s ease;
+}
+
+.author-items__card:hover,
+.author-items__card:focus-within {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.author-items__card-top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+}
+
+.author-items__avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #eee;
+  color: #333;
+}
+
+.author-items__avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-items__image-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 230px;
+  margin-top: 28px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.author-items__image-link img {
+  display: block;
+  width: 100%;
+  max-height: 230px;
+  object-fit: contain;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+
+.author-items__card:hover .author-items__image-link img,
+.author-items__card:focus-within .author-items__image-link img {
+  transform: translateY(-3px) scale(1.05);
+}
+
+.author-items__card-info {
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.author-items__card-info h4 {
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #101025;
+}
+
+.author-profile__skeleton-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 55px;
+}
+
+.author-profile__skeleton-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.author-items__skeleton-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+}
+
+.new-items__loading .skeleton-box,
+.nft-details__loading .skeleton-box,
+.author-profile__loading .skeleton-box {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #e5e5e5;
+  animation: none;
+}
+
+.new-items__loading .skeleton-box::after,
+.nft-details__loading .skeleton-box::after,
+.author-profile__loading .skeleton-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: new-items-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes new-items-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (min-width: 600px) and (max-width: 991px) {
+  .new-items__loading,
+  .author-items__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .new-items__skeleton-card:nth-child(n + 3) {
+    display: none;
+  }
+
+  .new-items__arrow {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 599px) {
+  .new-items__loading,
+  .author-items__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .new-items__skeleton-card:not(:first-child) {
+    display: none;
+  }
+
+  .new-items__arrow {
+    width: 34px;
+    height: 34px;
+  }
+
+  .new-items__arrow svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .author-profile__header,
+  .author-profile__identity {
+    align-items: flex-start;
+  }
+
+  .author-profile__identity {
+    gap: 16px;
+  }
+
+  .author-profile__avatar {
+    width: 75px;
+    height: 75px;
+    font-size: 25px;
+  }
+
+  .author-profile__info h2 {
+    font-size: 20px;
+  }
+
+  .author-profile__wallet {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 767px) {
+  .nft-details__skeleton-image {
+    margin-bottom: 30px;
+  }
+
+  .nft-details__skeleton-content {
+    gap: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .new-items__loading .skeleton-box::after,
+  .nft-details__loading .skeleton-box::after,
+  .author-profile__loading .skeleton-box::after {
+    animation: none;
+  }
+
+  .new-items__card,
+  .author-items__card,
+  .new-items__image-link img,
+  .author-items__image-link img {
+    transition: none;
+  }
+
+  .new-items__card:hover .new-items__image-link img,
+  .new-items__card:focus-within .new-items__image-link img,
+  .author-items__card:hover .author-items__image-link img,
+  .author-items__card:focus-within .author-items__image-link img {
+    transform: none;
+  }
+}

@@ -15,8 +15,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/author" element={<Author />} />
+        <Route path="/author/:authorId" element={<Author />} />
         <Route path="/item-details" element={<ItemDetails />} />
-        <Route path="/item-details/:nftId" element={<HotCollectionDetails />} />
+        <Route path="/item-details/:nftId" element={<ItemDetails />} />
+        <Route path="/item-details/:source/:nftId" element={<ItemDetails />} />
       </Routes>
       <Footer />
     </Router>

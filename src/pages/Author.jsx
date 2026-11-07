@@ -1,64 +1,169 @@
-import React from "react";
-import AuthorBanner from "../images/author_banner.jpg";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import Skeleton from "../components/UI/Skeleton";
+import { fetchAuthorDetails } from "../components/UI/nftApi";
 import AuthorItems from "../components/author/AuthorItems";
-import { Link } from "react-router-dom";
-import AuthorImage from "../images/author_thumbnail.jpg";
+import "../components/home/NewItems.css";
+
+const AuthorSkeleton = () => {
+  return (
+    <div
+      className="author-profile__loading"
+      role="status"
+      aria-label="Loading author profile"
+    >
+      <div className="author-profile__skeleton-header">
+        <Skeleton width="110px" height="110px" borderRadius="50%" />
+
+        <div className="author-profile__skeleton-text">
+          <Skeleton width="180px" height="25px" borderRadius="4px" />
+          <Skeleton width="120px" height="15px" borderRadius="4px" />
+          <Skeleton width="230px" height="15px" borderRadius="4px" />
+        </div>
+      </div>
+
+      <div className="author-items__grid">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div className="author-items__skeleton-card" key={index}>
+            <Skeleton width="100%" height="210px" borderRadius="6px" />
+            <Skeleton width="70%" height="16px" borderRadius="4px" />
+            <Skeleton width="45%" height="14px" borderRadius="4px" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const Author = () => {
+  const { authorId } = useParams();
+
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    window.scrollTo(0, 0);
+    setProfile(null);
+    setLoading(true);
+    setError("");
+    setCopied(false);
+
+    if (!authorId) {
+      setLoading(false);
+      return () => {
+        active = false;
+      };
+    }
+
+    async function getAuthor() {
+      try {
+        const data = await fetchAuthorDetails(authorId);
+
+        if (active) {
+          setProfile(data);
+        }
+      } catch (err) {
+        console.error("Failed to load author:", err);
+
+        if (active) {
+          setError("Unable to load this author profile.");
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
+    getAuthor();
+
+    return () => {
+      active = false;
+    };
+  }, [authorId]);
+
+  async function copyWallet() {
+    if (!profile?.wallet) return;
+
+    try {
+      await navigator.clipboard.writeText(String(profile.wallet));
+      setCopied(true);
+    } catch (err) {
+      console.error("Unable to copy wallet:", err);
+    }
+  }
+
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
         <div id="top"></div>
-
-        <section
-          id="profile_banner"
-          aria-label="section"
-          className="text-light"
-          data-bgimage="url(images/author_banner.jpg) top"
-          style={{ background: `url(${AuthorBanner}) top` }}
-        ></section>
-
-        <section aria-label="section">
+        <section className="mt90 sm-mt-0" aria-label="Author profile">
           <div className="container">
-            <div className="row">
-              <div className="col-md-12">
-                <div className="d_profile de-flex">
-                  <div className="de-flex-col">
-                    <div className="profile_avatar">
-                      <img src={AuthorImage} alt="" />
-
-                      <i className="fa fa-check"></i>
-                      <div className="profile_name">
-                        <h4>
-                          Monica Lucas
-                          <span className="profile_username">@monicaaaa</span>
-                          <span id="wallet" className="profile_wallet">
-                            UDHUHWudhwd78wdt7edb32uidbwyuidhg7wUHIFUHWewiqdj87dy7
+            {!authorId ? (
+              <p>Select an author to view their profile.</p>
+            ) : loading ? (
+              <AuthorSkeleton />
+            ) : error ? (
+              <p role="alert">{error}</p>
+            ) : !profile ? (
+              <p>Author not found.</p>
+            ) : (
+              <>
+                <div className="author-profile__header">
+                  <div className="author-profile__identity">
+                    <div className="author-profile__avatar">
+                      {profile.image ? (
+                        <img
+                          src={profile.image}
+                          alt={profile.name || "Author"}
+                        />
+                      ) : (
+                        <span>{(profile.name || "?").charAt(0)}</span>
+                      )}
+                    </div>
+                    <div className="author-profile__info">
+                      <h2>{profile.name || "Unknown author"}</h2>
+                      {profile.username && (
+                        <span className="author-profile__username">
+                          @{String(profile.username).replace(/^@/, "")}
+                        </span>
+                      )}
+                      {profile.wallet && (
+                        <div className="author-profile__wallet">
+                          <span title={String(profile.wallet)}>
+                            {profile.wallet}
                           </span>
-                          <button id="btn_copy" title="Copy Text">
-                            Copy
+                          <button type="button" onClick={copyWallet}>
+                            {copied ? "Copied" : "Copy"}
                           </button>
-                        </h4>
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="profile_follow de-flex">
-                    <div className="de-flex-col">
-                      <div className="profile_follower">573 followers</div>
-                      <Link to="#" className="btn-main">
-                        Follow
-                      </Link>
-                    </div>
+                  <div className="author-profile__actions">
+                    <strong>
+                      {profile.followers != null
+                        ? `${profile.followers} followers`
+                        : "Followers unavailable"}
+                    </strong>
+                    <button
+                      type="button"
+                      className="btn-main"
+                      onClick={() =>
+                        window.alert("Following profiles is not available yet.")
+                      }
+                    >
+                      Follow
+                    </button>
                   </div>
                 </div>
-              </div>
-
-              <div className="col-md-12">
-                <div className="de_tab tab_simple">
-                  <AuthorItems />
-                </div>
-              </div>
-            </div>
+                <AuthorItems items={profile.items} profile={profile} />
+              </>
+            )}
           </div>
         </section>
       </div>

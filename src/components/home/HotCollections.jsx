@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useKeenSlider } from "keen-slider/react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Skeleton from "../UI/Skeleton";
+import { getAuthorPath } from "../../components/UI/nftApi";
 import "keen-slider/keen-slider.min.css";
 import "./HotCollections.css";
 
@@ -176,47 +177,61 @@ const HotCollections = () => {
                     aria-label="Hot Collections"
                     aria-live="off"
                   >
-                    {collections.map((collection) => (
-                      <div
-                        className="keen-slider__slide hot-collections__slide"
-                        key={collection.id ?? collection.nftId}
-                      >
-                        <div className="nft_coll">
-                          <div className="nft_wrap">
-                            <Link to={`/item-details/${collection.nftId}`}>
-                              <img
-                                src={collection.nftImage}
-                                className="lazy img-fluid"
-                                alt={collection.title}
-                                loading="lazy"
-                              />
-                            </Link>
-                          </div>
+                    {collections.map((collection) => {
+                      const nftPath = `/item-details/${collection.nftId}`;
 
-                          <div className="nft_coll_pp">
-                            <Link to="/author">
-                              <img
-                                src={collection.authorImage}
-                                className="lazy pp-coll"
-                                alt="Collection creator"
-                                loading="lazy"
-                              />
-                            </Link>
-                            <i className="fa fa-check"></i>
-                          </div>
+                      const authorPath = getAuthorPath({
+                        id: collection.authorId,
+                      });
 
-                          <div className="nft_coll_info">
-                            <Link to={`/item-details/${collection.nftId}`}>
-                              <h4>{collection.title}</h4>
-                            </Link>
-                            <span>ERC-{collection.code}</span>
+                      return (
+                        <div
+                          className="keen-slider__slide hot-collections__slide"
+                          key={collection.id ?? collection.nftId}
+                        >
+                          <div className="nft_coll">
+                            <div className="nft_wrap">
+                              <Link to={nftPath}>
+                                <img
+                                  src={collection.nftImage}
+                                  className="lazy img-fluid"
+                                  alt={collection.title}
+                                  loading="lazy"
+                                />
+                              </Link>
+                            </div>
+                            <div className="nft_coll_pp">
+                              {authorPath ? (
+                                <Link to={authorPath}>
+                                  <img
+                                    src={collection.authorImage}
+                                    className="lazy pp-coll"
+                                    alt="Collection author"
+                                    loading="lazy"
+                                  />
+                                </Link>
+                              ) : (
+                                <img
+                                  src={collection.authorImage}
+                                  className="lazy pp-coll"
+                                  alt="Collection author"
+                                  loading="lazy"
+                                />
+                              )}
+                              <i className="fa fa-check"></i>
+                            </div>
+                            <div className="nft_coll_info">
+                              <Link to={nftPath}>
+                                <h4>{collection.title}</h4>
+                              </Link>
+                              <span>ERC-{collection.code}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
-
                 {(loading || canNavigate) && (
                   <>
                     <button
@@ -228,7 +243,6 @@ const HotCollections = () => {
                     >
                       <FaChevronLeft aria-hidden="true" />
                     </button>
-
                     <button
                       type="button"
                       className="hot-collections__arrow hot-collections__arrow--right"

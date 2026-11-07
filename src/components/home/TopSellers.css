@@ -1,0 +1,226 @@
+.top-sellers__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(50px, auto));
+  grid-auto-flow: column;
+  column-gap: 28px;
+  row-gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 0 0 50px;
+  list-style: none;
+}
+
+.top-sellers__entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 50px;
+}
+
+.top-sellers__rank {
+  display: block;
+  width: 20px;
+  flex-shrink: 0;
+  color: #888;
+  font-size: 13px;
+  text-align: right;
+}
+
+.top-sellers__seller {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.top-sellers__avatar-link {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.top-sellers__avatar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #4b2b91;
+  color: #fff;
+  font-size: 18px;
+}
+
+.top-sellers__avatar img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.top-sellers__avatar-link:hover .top-sellers__avatar img,
+.top-sellers__avatar-link:focus-visible .top-sellers__avatar img {
+  transform: scale(0.87);
+}
+
+.top-sellers__verified {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #8064e8;
+  color: #fff;
+}
+
+.top-sellers__verified svg {
+  width: 10px;
+  height: 10px;
+}
+
+.top-sellers__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+.top-sellers__name-link {
+  display: block;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+.top-sellers__name {
+  display: block;
+  overflow: hidden;
+  color: #151525;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.top-sellers__name-link:hover .top-sellers__name,
+.top-sellers__name-link:focus-visible .top-sellers__name {
+  color: #8064e8;
+}
+
+.top-sellers__name-link:hover,
+.top-sellers__name-link:focus {
+  text-decoration: none;
+}
+
+.top-sellers__eth {
+  display: block;
+  color: #777;
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.top-sellers__avatar-link:focus-visible,
+.top-sellers__name-link:focus-visible {
+  outline: 2px solid #4b2b91;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.top-sellers__avatar-link:focus-visible {
+  border-radius: 50%;
+}
+
+.top-sellers__skeleton-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.top-sellers__loading .skeleton-box {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #e5e5e5;
+  animation: none;
+}
+
+.top-sellers__loading .skeleton-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  animation: top-sellers-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes top-sellers-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 991px) {
+  .top-sellers__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(6, minmax(50px, auto));
+    column-gap: 24px;
+    row-gap: 18px;
+  }
+}
+
+@media (max-width: 599px) {
+  .top-sellers__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-rows: minmax(50px, auto);
+    grid-auto-flow: row;
+    gap: 18px;
+    padding-bottom: 35px;
+  }
+
+  .top-sellers__entry {
+    gap: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-sellers__loading .skeleton-box::after {
+    animation: none;
+  }
+
+  .top-sellers__avatar img,
+  .top-sellers__name {
+    transition: none;
+  }
+
+  .top-sellers__avatar-link:hover .top-sellers__avatar img,
+  .top-sellers__avatar-link:focus-visible .top-sellers__avatar img {
+    transform: none;
+  }
+}

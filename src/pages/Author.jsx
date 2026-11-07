@@ -4,6 +4,7 @@ import Skeleton from "../components/UI/Skeleton";
 import { fetchAuthorDetails } from "../components/UI/nftApi";
 import AuthorItems from "../components/author/AuthorItems";
 import "../components/home/NewItems.css";
+import { FaCheck } from "react-icons/fa";
 
 const AuthorSkeleton = () => {
   return (
@@ -124,6 +125,12 @@ const Author = () => {
                       ) : (
                         <span>{(profile.name || "?").charAt(0)}</span>
                       )}
+                      <span
+                        className="author-profile__verified"
+                        aria-hidden="true"
+                      >
+                        <FaCheck />
+                      </span>
                     </div>
                     <div className="author-profile__info">
                       <h2>{profile.name || "Unknown author"}</h2>

@@ -3,6 +3,7 @@ import axios from "axios";
 const API = {
   hot: "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections",
   new: "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems",
+  explore: "https://us-central1-nft-cloud-functions.cloudfunctions.net/explore",
   details:
     "https://us-central1-nft-cloud-functions.cloudfunctions.net/itemDetails",
   authors: "https://us-central1-nft-cloud-functions.cloudfunctions.net/authors",
@@ -158,23 +159,39 @@ export function normalizeNft(raw, source = "new") {
   };
 }
 
-export async function fetchNfts(source = "new") {
-  const { data } = await axios.get(API[source] || API.new);
-
+function extractNftArray(data) {
   const items = Array.isArray(data)
     ? data
     : (data?.items ??
+      data?.nfts ??
+      data?.explore ??
+      data?.exploreItems ??
       data?.newItems ??
       data?.hotCollections ??
       data?.results ??
       data?.data?.items ??
+      data?.data?.nfts ??
       data?.data);
 
   if (!Array.isArray(items)) {
     throw new Error("Unexpected NFT API response");
   }
 
-  return items.map((item) => normalizeNft(item, source));
+  return items;
+}
+
+export async function fetchNfts(source = "new", filter = "") {
+  const url = API[source];
+
+  if (!url || !["hot", "new", "explore"].includes(source)) {
+    throw new Error("Invalid NFT collection source");
+  }
+
+  const { data } = await axios.get(url, {
+    params: source === "explore" && filter ? { filter } : {},
+  });
+
+  return extractNftArray(data).map((item) => normalizeNft(item, source));
 }
 
 export async function fetchNftDetails(nftId) {

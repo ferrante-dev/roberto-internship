@@ -1,68 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Skeleton from "../components/UI/Skeleton";
-import { fetchAuthorDetails } from "../components/UI/nftApi";
-import AuthorItems from "../components/author/AuthorItems";
-import "../components/home/NewItems.css";
+import { Link, useParams } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
+import AuthorBanner from "../images/author_banner.jpg";
+import AuthorItems from "../components/author/AuthorItems";
+import FollowButton from "../components/author/FollowButton";
+import Skeleton from "../components/UI/Skeleton";
+import { fetchAuthorDetails, getAuthorPath } from "../components/UI/nftApi";
+import "../components/author/Author.css";
 
-const AuthorSkeleton = () => {
-  return (
-    <div
-      className="author-profile__loading"
-      role="status"
-      aria-label="Loading author profile"
-    >
-      <div className="author-profile__skeleton-header">
-        <Skeleton width="110px" height="110px" borderRadius="50%" />
-
-        <div className="author-profile__skeleton-text">
-          <Skeleton width="180px" height="25px" borderRadius="4px" />
-          <Skeleton width="120px" height="15px" borderRadius="4px" />
-          <Skeleton width="230px" height="15px" borderRadius="4px" />
-        </div>
-      </div>
-
-      <div className="author-items__grid">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div className="author-items__skeleton-card" key={index}>
-            <Skeleton width="100%" height="210px" borderRadius="6px" />
-            <Skeleton width="70%" height="16px" borderRadius="4px" />
-            <Skeleton width="45%" height="14px" borderRadius="4px" />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+const DEFAULT_AUTHOR_ID = "73855012";
 
 const Author = () => {
   const { authorId } = useParams();
+  const requestedAuthorId = authorId || DEFAULT_AUTHOR_ID;
 
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
     let active = true;
 
     window.scrollTo(0, 0);
-    setProfile(null);
-    setLoading(true);
-    setError("");
-    setCopied(false);
 
-    if (!authorId) {
-      setLoading(false);
-      return () => {
-        active = false;
-      };
-    }
+    setLoading(true);
+    setProfile(null);
+    setError("");
+    setCopyStatus("");
 
     async function getAuthor() {
       try {
-        const data = await fetchAuthorDetails(authorId);
+        const data = await fetchAuthorDetails(requestedAuthorId);
 
         if (active) {
           setProfile(data);
@@ -71,7 +41,7 @@ const Author = () => {
         console.error("Failed to load author:", err);
 
         if (active) {
-          setError("Unable to load this author profile.");
+          setError("Unable to load this author.");
         }
       } finally {
         if (active) {
@@ -85,91 +55,209 @@ const Author = () => {
     return () => {
       active = false;
     };
-  }, [authorId]);
+  }, [requestedAuthorId, retryCount]);
 
-  async function copyWallet() {
+  const handleCopy = async () => {
     if (!profile?.wallet) return;
 
     try {
-      await navigator.clipboard.writeText(String(profile.wallet));
-      setCopied(true);
+      await navigator.clipboard.writeText(profile.wallet);
+      setCopyStatus("Copied!");
     } catch (err) {
-      console.error("Unable to copy wallet:", err);
+      console.error("Unable to copy wallet address:", err);
+      setCopyStatus("Copy failed");
     }
-  }
+  };
+
+  const username = profile?.username
+    ? String(profile.username).startsWith("@")
+      ? String(profile.username)
+      : `@${profile.username}`
+    : null;
+
+  const profilePath = profile ? getAuthorPath(profile) : null;
 
   return (
-    <div id="wrapper">
+    <div id="wrapper" className="author-page">
       <div className="no-bottom no-top" id="content">
         <div id="top"></div>
-        <section className="mt90 sm-mt-0" aria-label="Author profile">
+
+        <section
+          id="profile_banner"
+          aria-label="Author banner"
+          className="text-light"
+          style={{
+            background: `url(${AuthorBanner}) top center / cover`,
+          }}
+        ></section>
+
+        <section className="author-page__section" aria-label="Author profile">
           <div className="container">
-            {!authorId ? (
-              <p>Select an author to view their profile.</p>
-            ) : loading ? (
-              <AuthorSkeleton />
-            ) : error ? (
-              <p role="alert">{error}</p>
-            ) : !profile ? (
-              <p>Author not found.</p>
-            ) : (
-              <>
-                <div className="author-profile__header">
-                  <div className="author-profile__identity">
-                    <div className="author-profile__avatar">
-                      {profile.image ? (
-                        <img
-                          src={profile.image}
-                          alt={profile.name || "Author"}
+            {loading ? (
+              <div
+                className="author-page__loading"
+                role="status"
+                aria-label="Loading author profile and NFTs"
+                aria-busy="true"
+              >
+                <div className="author-page__header">
+                  <div className="author-page__identity">
+                    <div className="author-page__skeleton-avatar">
+                      <Skeleton width="100%" height="100%" borderRadius="50%" />
+
+                      <span className="author-page__skeleton-verified">
+                        <Skeleton
+                          width="100%"
+                          height="100%"
+                          borderRadius="50%"
                         />
-                      ) : (
-                        <span>{(profile.name || "?").charAt(0)}</span>
-                      )}
-                      <span
-                        className="author-profile__verified"
-                        aria-hidden="true"
-                      >
-                        <FaCheck />
                       </span>
                     </div>
-                    <div className="author-profile__info">
-                      <h2>{profile.name || "Unknown author"}</h2>
-                      {profile.username && (
-                        <span className="author-profile__username">
-                          @{String(profile.username).replace(/^@/, "")}
+
+                    <div className="author-page__details">
+                      <Skeleton
+                        width="160px"
+                        height="27px"
+                        borderRadius="4px"
+                      />
+
+                      <Skeleton
+                        width="110px"
+                        height="18px"
+                        borderRadius="4px"
+                      />
+
+                      <div className="author-page__skeleton-wallet-row">
+                        <Skeleton
+                          width="180px"
+                          height="17px"
+                          borderRadius="4px"
+                        />
+
+                        <Skeleton
+                          width="52px"
+                          height="28px"
+                          borderRadius="4px"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="author-page__follow">
+                    <Skeleton width="115px" height="20px" borderRadius="4px" />
+
+                    <Skeleton width="155px" height="46px" borderRadius="5px" />
+                  </div>
+                </div>
+
+                <AuthorItems loading />
+              </div>
+            ) : error ? (
+              <div className="author-page__error text-center" role="alert">
+                <p>{error}</p>
+
+                <button
+                  type="button"
+                  className="btn-main"
+                  onClick={() => setRetryCount((previous) => previous + 1)}
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : profile ? (
+              <>
+                <div className="author-page__header">
+                  <div className="author-page__identity">
+                    {profilePath ? (
+                      <Link
+                        to={profilePath}
+                        className="author-page__avatar-link"
+                        aria-label={`View ${profile.name}'s profile`}
+                      >
+                        <div className="author-page__avatar">
+                          {profile.image ? (
+                            <img
+                              src={profile.image}
+                              alt={profile.name || "Author"}
+                            />
+                          ) : (
+                            <span>{profile.name?.charAt(0) || "?"}</span>
+                          )}
+
+                          <span
+                            className="author-page__verified"
+                            aria-hidden="true"
+                          >
+                            <FaCheck />
+                          </span>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="author-page__avatar">
+                        {profile.image ? (
+                          <img
+                            src={profile.image}
+                            alt={profile.name || "Author"}
+                          />
+                        ) : (
+                          <span>{profile.name?.charAt(0) || "?"}</span>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="author-page__details">
+                      <h1 className="author-page__name">
+                        {profile.name || "Unknown Author"}
+                      </h1>
+
+                      {username && (
+                        <span className="author-page__username">
+                          {username}
                         </span>
                       )}
+
                       {profile.wallet && (
-                        <div className="author-profile__wallet">
-                          <span title={String(profile.wallet)}>
+                        <div className="author-page__wallet-row">
+                          <span
+                            className="author-page__wallet"
+                            title={profile.wallet}
+                          >
                             {profile.wallet}
                           </span>
-                          <button type="button" onClick={copyWallet}>
-                            {copied ? "Copied" : "Copy"}
+
+                          <button
+                            type="button"
+                            className="author-page__copy"
+                            onClick={handleCopy}
+                            title="Copy wallet address"
+                          >
+                            Copy
                           </button>
+
+                          <span
+                            className="author-page__copy-status"
+                            aria-live="polite"
+                          >
+                            {copyStatus}
+                          </span>
                         </div>
                       )}
                     </div>
                   </div>
-                  <div className="author-profile__actions">
-                    <strong>
-                      {profile.followers != null
-                        ? `${profile.followers} followers`
-                        : "Followers unavailable"}
-                    </strong>
-                    <button
-                      type="button"
-                      className="btn-main"
-                      onClick={() =>
-                        window.alert("Following profiles is not available yet.")
-                      }
-                    >
-                      Follow
-                    </button>
-                  </div>
+
+                  <FollowButton
+                    key={profile.id}
+                    authorId={profile.id}
+                    followers={profile.followers}
+                  />
                 </div>
-                <AuthorItems items={profile.items} profile={profile} />
+
+                <AuthorItems profile={profile} items={profile.items} />
               </>
+            ) : (
+              <div className="author-page__error text-center">
+                <p>Author not found.</p>
+              </div>
             )}
           </div>
         </section>

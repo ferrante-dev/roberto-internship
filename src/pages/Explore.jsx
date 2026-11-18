@@ -29,7 +29,7 @@ const Explore = () => {
           </div>
         </section>
 
-        <section aria-label="section">
+        <section aria-label="Explore NFTs" className="explore-page__section">
           <div className="container">
             <div className="row">
               <ExploreItems />

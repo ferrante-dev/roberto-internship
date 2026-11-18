@@ -58,7 +58,6 @@ const FollowButton = ({ authorId, followers = 0 }) => {
         {followerCount.toLocaleString()}{" "}
         {followerCount === 1 ? "follower" : "followers"}
       </span>
-
       <button
         type="button"
         className={`btn-main author-page__follow-button ${

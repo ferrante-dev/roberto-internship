@@ -81,7 +81,6 @@ const Author = () => {
     <div id="wrapper" className="author-page">
       <div className="no-bottom no-top" id="content">
         <div id="top"></div>
-
         <section
           id="profile_banner"
           aria-label="Author banner"
@@ -90,7 +89,6 @@ const Author = () => {
             background: `url(${AuthorBanner}) top center / cover`,
           }}
         ></section>
-
         <section className="author-page__section" aria-label="Author profile">
           <div className="container">
             {loading ? (
@@ -104,7 +102,6 @@ const Author = () => {
                   <div className="author-page__identity">
                     <div className="author-page__skeleton-avatar">
                       <Skeleton width="100%" height="100%" borderRadius="50%" />
-
                       <span className="author-page__skeleton-verified">
                         <Skeleton
                           width="100%"
@@ -113,27 +110,23 @@ const Author = () => {
                         />
                       </span>
                     </div>
-
                     <div className="author-page__details">
                       <Skeleton
                         width="160px"
                         height="27px"
                         borderRadius="4px"
                       />
-
                       <Skeleton
                         width="110px"
                         height="18px"
                         borderRadius="4px"
                       />
-
                       <div className="author-page__skeleton-wallet-row">
                         <Skeleton
                           width="180px"
                           height="17px"
                           borderRadius="4px"
                         />
-
                         <Skeleton
                           width="52px"
                           height="28px"
@@ -142,20 +135,16 @@ const Author = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="author-page__follow">
                     <Skeleton width="115px" height="20px" borderRadius="4px" />
-
                     <Skeleton width="155px" height="46px" borderRadius="5px" />
                   </div>
                 </div>
-
                 <AuthorItems loading />
               </div>
             ) : error ? (
               <div className="author-page__error text-center" role="alert">
                 <p>{error}</p>
-
                 <button
                   type="button"
                   className="btn-main"
@@ -166,7 +155,11 @@ const Author = () => {
               </div>
             ) : profile ? (
               <>
-                <div className="author-page__header">
+                <div
+                  className="author-page__header"
+                  data-aos="fade-up"
+                  data-aos-offset="0"
+                >
                   <div className="author-page__identity">
                     {profilePath ? (
                       <Link
@@ -183,7 +176,6 @@ const Author = () => {
                           ) : (
                             <span>{profile.name?.charAt(0) || "?"}</span>
                           )}
-
                           <span
                             className="author-page__verified"
                             aria-hidden="true"
@@ -204,18 +196,15 @@ const Author = () => {
                         )}
                       </div>
                     )}
-
                     <div className="author-page__details">
                       <h1 className="author-page__name">
                         {profile.name || "Unknown Author"}
                       </h1>
-
                       {username && (
                         <span className="author-page__username">
                           {username}
                         </span>
                       )}
-
                       {profile.wallet && (
                         <div className="author-page__wallet-row">
                           <span
@@ -224,7 +213,6 @@ const Author = () => {
                           >
                             {profile.wallet}
                           </span>
-
                           <button
                             type="button"
                             className="author-page__copy"
@@ -233,7 +221,6 @@ const Author = () => {
                           >
                             Copy
                           </button>
-
                           <span
                             className="author-page__copy-status"
                             aria-live="polite"
@@ -244,14 +231,12 @@ const Author = () => {
                       )}
                     </div>
                   </div>
-
                   <FollowButton
                     key={profile.id}
                     authorId={profile.id}
                     followers={profile.followers}
                   />
                 </div>
-
                 <AuthorItems profile={profile} items={profile.items} />
               </>
             ) : (

@@ -13,23 +13,18 @@ const AuthorCardSkeleton = () => {
       <div className="author-nft-card__top">
         <div className="author-nft-card__skeleton-avatar">
           <Skeleton width="46px" height="46px" borderRadius="50%" />
-
           <span className="author-nft-card__skeleton-verified">
             <Skeleton width="17px" height="17px" borderRadius="50%" />
           </span>
         </div>
       </div>
-
       <div className="author-nft-card__artwork author-nft-card__skeleton-artwork">
         <Skeleton width="100%" height="100%" borderRadius="9px" />
       </div>
-
       <div className="author-nft-card__info">
         <Skeleton width="75%" height="17px" borderRadius="4px" />
-
         <div className="author-nft-card__bottom">
           <Skeleton width="65px" height="15px" borderRadius="4px" />
-
           <Skeleton width="40px" height="14px" borderRadius="4px" />
         </div>
       </div>
@@ -73,15 +68,18 @@ const AuthorItems = ({ items = [], profile, loading = false }) => {
             ) : (
               <span>{profile?.name?.charAt(0) || "?"}</span>
             )}
-
             <span className="author-nft-card__verified" aria-hidden="true">
               <FaCheck />
             </span>
           </div>
         );
-
         return (
-          <article className="author-nft-card" key={item.id ?? index}>
+          <article
+            className="author-nft-card"
+            key={item.id ?? index}
+            data-aos="fade-up"
+            data-aos-delay={(index % 4) * 100}
+          >
             <div className="author-nft-card__top">
               {authorPath ? (
                 <Link
@@ -95,7 +93,6 @@ const AuthorItems = ({ items = [], profile, loading = false }) => {
                 avatar
               )}
             </div>
-
             <div className="author-nft-card__artwork">
               {nftPath ? (
                 <Link
@@ -119,7 +116,6 @@ const AuthorItems = ({ items = [], profile, loading = false }) => {
                 </div>
               )}
             </div>
-
             <div className="author-nft-card__info">
               {nftPath ? (
                 <Link to={nftPath} className="author-nft-card__title-link">
@@ -128,12 +124,10 @@ const AuthorItems = ({ items = [], profile, loading = false }) => {
               ) : (
                 <h3>{item.title}</h3>
               )}
-
               <div className="author-nft-card__bottom">
                 <span className="author-nft-card__price">
                   {formatEth(item.price)}
                 </span>
-
                 <span
                   className="author-nft-card__likes"
                   aria-label={`${item.likes ?? 0} likes`}

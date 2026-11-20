@@ -7,6 +7,7 @@ import {
   FaCheck,
 } from "react-icons/fa";
 import { useKeenSlider } from "keen-slider/react";
+import AOS from "aos";
 import Skeleton from "../UI/Skeleton";
 import {
   fetchNfts,
@@ -56,10 +57,16 @@ const NewItems = () => {
     },
     breakpoints: {
       "(min-width: 600px)": {
-        slides: { perView: 2, spacing: 14 },
+        slides: {
+          perView: 2,
+          spacing: 14,
+        },
       },
       "(min-width: 992px)": {
-        slides: { perView: 4, spacing: 12 },
+        slides: {
+          perView: 4,
+          spacing: 12,
+        },
       },
     },
     dragStarted: () => setDragging(true),
@@ -72,12 +79,20 @@ const NewItems = () => {
     async function getItems() {
       try {
         const data = await fetchNfts("new");
-        if (active) setItems(data);
+
+        if (active) {
+          setItems(data);
+        }
       } catch (err) {
         console.error("Failed to load New Items:", err);
-        if (active) setError("Unable to load New Items.");
+
+        if (active) {
+          setError("Unable to load New Items.");
+        }
       } finally {
-        if (active) setLoading(false);
+        if (active) {
+          setLoading(false);
+        }
       }
     }
 
@@ -89,9 +104,17 @@ const NewItems = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && items.length > 0) {
-      instanceRef.current?.update();
-    }
+    if (loading) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      if (items.length > 0) {
+        instanceRef.current?.update();
+      }
+
+      AOS.refreshHard();
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [loading, items, instanceRef]);
 
   useEffect(() => {
@@ -127,14 +150,16 @@ const NewItems = () => {
     return () => window.clearInterval(interval);
   }, [loading, items.length, hovered, focused, dragging, instanceRef]);
 
-  const canNavigate = !loading && !error && items.length > 1;
+  const hasItems = !loading && !error && items.length > 0;
+
+  const canNavigate = hasItems && items.length > 1;
 
   return (
     <section id="section-items" className="no-bottom">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="text-center">
+            <div className="text-center" data-aos="fade-up" data-aos-offset="0">
               <h2>New Items</h2>
               <div className="small-border bg-color-2"></div>
             </div>
@@ -149,6 +174,9 @@ const NewItems = () => {
             <div className="col-12">
               <div
                 className="new-items__carousel"
+                data-aos={hasItems ? "fade-up" : undefined}
+                data-aos-delay="100"
+                data-aos-offset="0"
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
                 onFocusCapture={() => setFocused(true)}
@@ -181,6 +209,7 @@ const NewItems = () => {
                       const nftPath = getNftPath(item);
                       const authorPath = getAuthorPath(item.creator);
                       const countdown = formatCountdown(item.deadline, now);
+
                       return (
                         <div
                           className="keen-slider__slide new-items__slide"
@@ -218,14 +247,12 @@ const NewItems = () => {
                                   )}
                                 </div>
                               )}
-
                               {countdown && (
                                 <span className="new-items__countdown">
                                   {countdown}
                                 </span>
                               )}
                             </div>
-
                             {nftPath ? (
                               <Link
                                 to={nftPath}
@@ -246,7 +273,6 @@ const NewItems = () => {
                                 )}
                               </div>
                             )}
-
                             <div className="new-items__card-info">
                               {nftPath ? (
                                 <Link to={nftPath}>
@@ -255,10 +281,8 @@ const NewItems = () => {
                               ) : (
                                 <h4>{item.title}</h4>
                               )}
-
                               <div className="new-items__card-meta">
                                 <span>{formatEth(item.price)}</span>
-
                                 <span className="new-items__likes">
                                   <FaHeart aria-hidden="true" />
                                   {item.likes ?? "—"}
@@ -271,7 +295,6 @@ const NewItems = () => {
                     })}
                   </div>
                 )}
-
                 {(loading || canNavigate) && (
                   <>
                     <button
@@ -283,7 +306,6 @@ const NewItems = () => {
                     >
                       <FaChevronLeft aria-hidden="true" />
                     </button>
-
                     <button
                       type="button"
                       className="new-items__arrow new-items__arrow--right"

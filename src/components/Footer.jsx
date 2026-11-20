@@ -7,7 +7,12 @@ const Footer = () => {
     <footer className="footer-light">
       <div className="container">
         <div className="row">
-          <div className="col-md-3 col-sm-6 col-xs-1">
+          <div
+            className="col-md-3 col-sm-6 col-xs-1"
+            data-aos="fade-up"
+            data-aos-delay="0"
+            data-aos-offset="0"
+          >
             <div className="widget">
               <h5>Marketplace</h5>
               <ul>
@@ -44,7 +49,12 @@ const Footer = () => {
               </ul>
             </div>
           </div>
-          <div className="col-md-3 col-sm-6 col-xs-1">
+          <div
+            className="col-md-3 col-sm-6 col-xs-1"
+            data-aos="fade-up"
+            data-aos-delay="100"
+            data-aos-offset="0"
+          >
             <div className="widget">
               <h5>Resources</h5>
               <ul>
@@ -81,7 +91,12 @@ const Footer = () => {
               </ul>
             </div>
           </div>
-          <div className="col-md-3 col-sm-6 col-xs-1">
+          <div
+            className="col-md-3 col-sm-6 col-xs-1"
+            data-aos="fade-up"
+            data-aos-delay="200"
+            data-aos-offset="0"
+          >
             <div className="widget">
               <h5>Community</h5>
               <ul>
@@ -118,7 +133,12 @@ const Footer = () => {
               </ul>
             </div>
           </div>
-          <div className="col-md-3 col-sm-6 col-xs-1">
+          <div
+            className="col-md-3 col-sm-6 col-xs-1"
+            data-aos="fade-up"
+            data-aos-delay="300"
+            data-aos-offset="0"
+          >
             <div className="widget">
               <h5>Newsletter</h5>
               <p>
@@ -155,7 +175,11 @@ const Footer = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <div className="de-flex footer__wrapper">
+              <div
+                className="de-flex footer__wrapper"
+                data-aos="fade-up"
+                data-aos-offset="0"
+              >
                 <div className="de-flex-col">
                   <Link className="footer__link" to="/">
                     <img alt="" className="f-logo" src={Logo} />

@@ -3,8 +3,9 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useKeenSlider } from "keen-slider/react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import AOS from "aos";
 import Skeleton from "../UI/Skeleton";
-import { getAuthorPath } from "../../components/UI/nftApi";
+import { getAuthorPath } from "../UI/nftApi";
 import "keen-slider/keen-slider.min.css";
 import "./HotCollections.css";
 
@@ -17,11 +18,9 @@ const HotCollectionSkeleton = () => {
       <div className="hot-collections__skeleton-image">
         <Skeleton width="100%" height="100%" borderRadius="0" />
       </div>
-
       <div className="hot-collections__skeleton-avatar">
         <Skeleton width="50px" height="50px" borderRadius="50%" />
       </div>
-
       <div className="hot-collections__skeleton-info">
         <Skeleton width="65%" height="18px" borderRadius="4px" />
         <Skeleton width="35%" height="14px" borderRadius="4px" />
@@ -98,9 +97,17 @@ const HotCollections = () => {
   }, []);
 
   useEffect(() => {
-    if (!loading && collections.length > 0) {
-      instanceRef.current?.update();
-    }
+    if (loading) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      if (collections.length > 0) {
+        instanceRef.current?.update();
+      }
+
+      AOS.refreshHard();
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [loading, collections, instanceRef]);
 
   useEffect(() => {
@@ -118,7 +125,6 @@ const HotCollections = () => {
     ) {
       return;
     }
-
     const interval = window.setInterval(() => {
       instanceRef.current?.next();
     }, 4000);
@@ -126,19 +132,19 @@ const HotCollections = () => {
     return () => window.clearInterval(interval);
   }, [loading, collections.length, hovered, focused, dragging, instanceRef]);
 
-  const canNavigate = !loading && !error && collections.length > 1;
+  const hasCollections = !loading && !error && collections.length > 0;
+  const canNavigate = hasCollections && collections.length > 1;
 
   return (
     <section id="section-collections" className="no-bottom">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="text-center">
+            <div className="text-center" data-aos="fade-up" data-aos-offset="0">
               <h2>Hot Collections</h2>
               <div className="small-border bg-color-2"></div>
             </div>
           </div>
-
           {error ? (
             <div className="col-12 text-center" role="alert">
               {error}
@@ -149,6 +155,9 @@ const HotCollections = () => {
             <div className="col-12">
               <div
                 className="hot-collections__carousel"
+                data-aos={hasCollections ? "fade-up" : undefined}
+                data-aos-delay="100"
+                data-aos-offset="0"
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
                 onFocusCapture={() => setFocused(true)}
@@ -179,11 +188,9 @@ const HotCollections = () => {
                   >
                     {collections.map((collection) => {
                       const nftPath = `/item-details/${collection.nftId}`;
-
                       const authorPath = getAuthorPath({
                         id: collection.authorId,
                       });
-
                       return (
                         <div
                           className="keen-slider__slide hot-collections__slide"

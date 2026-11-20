@@ -126,16 +126,18 @@ const TopSellers = () => {
       active = false;
     };
   }, []);
+
   return (
     <section id="section-top-sellers" className="no-bottom">
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="text-center">
+            <div className="text-center" data-aos="fade-up">
               <h2>Top Sellers</h2>
               <div className="small-border bg-color-2"></div>
             </div>
           </div>
+
           <div className="col-lg-12">
             {error ? (
               <p className="text-center" role="alert">
@@ -159,6 +161,7 @@ const TopSellers = () => {
                       const authorPath = getAuthorPath({
                         id: seller.id,
                       });
+
                       const avatar = (
                         <div className="top-sellers__avatar">
                           {seller.image ? (
@@ -174,10 +177,13 @@ const TopSellers = () => {
                           </span>
                         </div>
                       );
+
                       return (
                         <li
                           className="top-sellers__entry"
                           key={seller.id ?? index}
+                          data-aos="fade-up"
+                          data-aos-delay={(index % 3) * 100}
                         >
                           <span className="top-sellers__rank">
                             {index + 1}.

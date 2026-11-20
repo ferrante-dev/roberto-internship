@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaEye, FaHeart, FaCheck } from "react-icons/fa";
+import AOS from "aos";
 import Skeleton from "../components/UI/Skeleton";
 import EthImage from "../images/ethereum.svg";
 import {
@@ -73,6 +74,16 @@ const ArtworkSkeleton = () => {
 const ItemArtwork = ({ image, title }) => {
   const [status, setStatus] = useState("loading");
 
+  useEffect(() => {
+    if (status !== "loaded") return;
+
+    const frame = window.requestAnimationFrame(() => {
+      AOS.refreshHard();
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [status]);
+
   if (!image || status === "error") {
     return (
       <div className="nft-details__image-unavailable">Image unavailable.</div>
@@ -80,7 +91,11 @@ const ItemArtwork = ({ image, title }) => {
   }
 
   return (
-    <div className="nft-details__artwork">
+    <div
+      className="nft-details__artwork"
+      data-aos={status === "loaded" ? "fade-up" : undefined}
+      data-aos-offset="0"
+    >
       {status === "loading" && (
         <div role="status" aria-label="Loading NFT artwork">
           <ArtworkSkeleton />
@@ -197,7 +212,6 @@ const ItemDetailsContent = ({ nftId }) => {
     return (
       <div className="nft-details__message" role="alert">
         <p>{error || "NFT not found."}</p>
-
         <button
           type="button"
           className="btn-main"
@@ -220,10 +234,13 @@ const ItemDetailsContent = ({ nftId }) => {
   return (
     <div className="nft-details__layout">
       <ItemArtwork key={item.image} image={item.image} title={title} />
-
-      <div className="nft-details__info">
+      <div
+        className="nft-details__info"
+        data-aos="fade-up"
+        data-aos-delay="100"
+        data-aos-offset="0"
+      >
         <h2 className="nft-details__title">{title}</h2>
-
         <div className="nft-details__stats">
           <div
             className="nft-details__stat"
@@ -233,7 +250,6 @@ const ItemDetailsContent = ({ nftId }) => {
             <FaEye aria-hidden="true" />
             <span>{item.views ?? "—"}</span>
           </div>
-
           <div
             className="nft-details__stat"
             title="Likes"
@@ -243,25 +259,19 @@ const ItemDetailsContent = ({ nftId }) => {
             <span>{item.likes ?? "—"}</span>
           </div>
         </div>
-
         <p className="nft-details__description">
           {item.description || "Description unavailable."}
         </p>
-
         <ProfileInfo person={item.owner} label="Owner" />
-
         <ProfileInfo person={item.creator} label="Creator" />
-
         <div className="nft-details__price">
           <h6>Price</h6>
-
           {formattedPrice !== "Price unavailable" ? (
             <div
               className="nft-details__price-value"
               aria-label={formattedPrice}
             >
               <img src={EthImage} alt="Ethereum" />
-
               <span>{formattedPrice.replace(/\s*ETH$/i, "")}</span>
             </div>
           ) : (
@@ -284,7 +294,6 @@ const ItemDetails = () => {
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
         <div id="top"></div>
-
         <section
           className={`nft-details mt90 sm-mt-0 ${
             source === "new" ? "nft-details--square" : ""

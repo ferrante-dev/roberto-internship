@@ -23,18 +23,14 @@ const ExploreSkeleton = () => {
         <div className="explore-items__skeleton-avatar">
           <Skeleton width="44px" height="44px" borderRadius="50%" />
         </div>
-
         <div className="explore-items__skeleton-timer">
           <Skeleton width="90px" height="24px" borderRadius="20px" />
         </div>
-
         <div className="explore-items__skeleton-image">
           <Skeleton width="100%" height="100%" borderRadius="6px" />
         </div>
-
         <div className="explore-items__skeleton-info">
           <Skeleton width="75%" height="18px" borderRadius="4px" />
-
           <Skeleton width="45%" height="15px" borderRadius="4px" />
         </div>
       </div>
@@ -117,11 +113,14 @@ const ExploreItems = () => {
 
   return (
     <>
-      <div className="col-12 explore-items__filter-row">
+      <div
+        className="col-12 explore-items__filter-row"
+        data-aos="fade-up"
+        data-aos-offset="0"
+      >
         <label htmlFor="filter-items" className="explore-items__filter-label">
           Sort by
         </label>
-
         <select
           id="filter-items"
           className="explore-items__select"
@@ -146,7 +145,6 @@ const ExploreItems = () => {
       ) : error ? (
         <div className="col-12 text-center explore-items__message" role="alert">
           <p>{error}</p>
-
           <button
             type="button"
             className="btn-main"
@@ -170,13 +168,14 @@ const ExploreItems = () => {
                 : item.owner;
 
             const authorPath = getAuthorPath(author);
-
             const countdown = formatCountdown(item.deadline, now);
 
             return (
               <div
                 key={item.id ?? index}
                 className="d-item col-lg-3 col-md-6 col-sm-6 col-12 explore-items__column"
+                data-aos="fade-up"
+                data-aos-delay={(index % 4) * 100}
               >
                 <div className="nft__item explore-items__card">
                   {author?.image && (
@@ -204,9 +203,7 @@ const ExploreItems = () => {
                       )}
                     </div>
                   )}
-
                   {countdown && <div className="de_countdown">{countdown}</div>}
-
                   <div className="nft__item_wrap explore-items__artwork">
                     {nftPath ? (
                       <Link to={nftPath} className="explore-items__image-link">
@@ -235,7 +232,6 @@ const ExploreItems = () => {
                       </div>
                     )}
                   </div>
-
                   <div className="nft__item_info">
                     {nftPath ? (
                       <Link to={nftPath}>
@@ -244,11 +240,9 @@ const ExploreItems = () => {
                     ) : (
                       <h4>{item.title}</h4>
                     )}
-
                     <div className="nft__item_price">
                       {formatEth(item.price)}
                     </div>
-
                     <div className="nft__item_like">
                       <i className="fa fa-heart" aria-hidden="true"></i>
                       <span>{item.likes ?? "—"}</span>
@@ -258,9 +252,12 @@ const ExploreItems = () => {
               </div>
             );
           })}
-
           {hasMoreItems && (
-            <div className="col-md-12 text-center explore-items__loadmore">
+            <div
+              className="col-md-12 text-center explore-items__loadmore"
+              data-aos="fade-up"
+              data-aos-offset="0"
+            >
               <button
                 type="button"
                 id="loadmore"

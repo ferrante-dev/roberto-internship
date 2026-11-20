@@ -2,7 +2,7 @@ import React from "react";
 
 const HeaderExplore = () => {
   return (
-    <div className="col-lg-12">
+    <div className="col-lg-12" data-aos="fade-up">
       <div className="items_filter">
         <form
           action="blank.php"
@@ -25,7 +25,6 @@ const HeaderExplore = () => {
             <div className="clearfix"></div>
           </div>
         </form>
-
         <div id="item_category" className="dropdown">
           <a href="#" className="btn-selector">
             All categories
@@ -60,7 +59,6 @@ const HeaderExplore = () => {
             </li>
           </ul>
         </div>
-
         <div id="buy_category" className="dropdown">
           <a href="#" className="btn-selector">
             Buy Now
@@ -77,7 +75,6 @@ const HeaderExplore = () => {
             </li>
           </ul>
         </div>
-
         <div id="items_type" className="dropdown">
           <a href="#" className="btn-selector">
             All Items

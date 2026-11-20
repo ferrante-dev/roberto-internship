@@ -1,0 +1,29 @@
+html [data-aos="fade-up"]:not(.aos-animate) {
+  transform: translate3d(0, 24px, 0);
+}
+
+html [data-aos]:focus-within {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  html [data-aos="fade-up"]:not(.aos-animate) {
+    transform: translate3d(0, 16px, 0);
+  }
+
+  html [data-aos][data-aos-delay] {
+    transition-delay: 0ms !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html [data-aos][data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+    pointer-events: auto !important;
+  }
+}
